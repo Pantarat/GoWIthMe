@@ -4,7 +4,9 @@ export default function CuiSineSlider(props) {
     const [value, setValue] = useState(50);
 
     const handleChange = (event) => {
-        setValue(event.target.value);
+        let updatedValue = event.target.value;
+        props.setValue(updatedValue);
+        setValue(updatedValue);
     };
 
     return (

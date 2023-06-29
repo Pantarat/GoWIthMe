@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 
 export default function DestinationDropdown(props) {
     const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState("Enter your destination...");
+    const [selected, setSelected] = useState("");
+    const [isFocused, setIsFocused] = useState(false);
     const dropdownRef = useRef(null);
 
     const toggleMenu = () => {
         if (isOpen) setIsOpen(false);
         else setIsOpen(true);
+        setIsFocused(false);
     };
 
     const handleClickOutside = (event) => {
@@ -32,14 +34,26 @@ export default function DestinationDropdown(props) {
         };
     }, []);
 
+    useEffect(() => {
+        handleOptionSelect(selected);
+    }, [selected])
+
     return (
         <div className="relative inline-block" ref={dropdownRef}>
-            <button ref={dropdownRef}
-                className="w-96 px-4 py-2 border-solid shadow text-gray-400 rounded-l text-left"
+            <input
+                ref={dropdownRef}
+                className={`w-96 px-4 py-2 border border-solid shadow outline-none text-gray-400 rounded-l text-left`}
+                value={selected}
+                onChange={(e) => setSelected(e.target.value)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                placeholder={isFocused ? "" : "Enter your destination..."}
+            />
+            <button
+                className="absolute right-0 top-0 w-12 h-full bg-white text-gray-500 rounded-r flex items-center justify-center border border-solid"
                 onClick={toggleMenu}
             >
-                {selected}
-                <img className="absolute right-5 top-5" src="./src/assets/Chevron.png" />
+                <img className="w-4 h-2" src="./src/assets/Chevron.png" alt="Dropdown Icon" />
             </button>
             <div
                 ref={dropdownRef}

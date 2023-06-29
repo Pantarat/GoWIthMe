@@ -27,39 +27,48 @@ export default function CustomInput(props) {
         'History': false,
         'Cafe': false
     })
+    const [foodMeat, setfoodMeat] = useState(50);
+    const [foodSpice, setfoodSpice] = useState(50);
+    const [foodRegion, setfoodRegion] = useState(50);
+    const [ready, setReady] = useState(false);
 
     let navigate = useNavigate();
 
     const handleNext = () => {
-        let path = `/results`; 
+        let updatedInterests = "";
+        Object.entries(interests).map(([key, value]) => {
+            value ? updatedInterests = updatedInterests + key + ", " : updatedInterests += ""
+        })
+
+        let updatedStyle = {
+            ...props.styles,
+            interests: updatedInterests,
+            duration: duration,
+            people_count: (children + adults),
+            food_meat: foodMeat,
+            food_spice: foodSpice,
+            food_region: foodRegion
+        };
+        props.setStyles(updatedStyle);
+        setReady(true);
+    }
+
+    const moveToNextPage = () => {
+        let path = `/results`;
         navigate(path);
-        console.log(props.styles)
+        console.log(props.styles);
     }
 
-    const handlePeopleCount = () => {
-        let people_count = adults + children;
-        let updatedStyle = {
-            ...props.styles,
-            people_count: people_count
-        }
-        props.setStyles(updatedStyle)
-    }
-
-    const handleDuration = () => {
-        let updatedStyle = {
-            ...props.styles,
-            duration: duration
-        }
-        props.setStyles(updatedStyle)
+    const handleInterest = (key, value) => {
+        setInterests({
+            ...interests,
+            [key]: value
+        })
     }
 
     useEffect(() => {
-        handlePeopleCount();
-    }, [adults,children])
-
-    useEffect(() => {
-        handleDuration();
-    }, [duration])
+        if (ready) moveToNextPage();
+    }, [props.styles])
 
     return (
         <div className="text-left">
@@ -72,11 +81,11 @@ export default function CustomInput(props) {
 
             <div className="mb-10">
                 <span className="font-bold mb-5 mr-5 text-2xl text-left">Adults</span>
-                <IncrementDecrementButtons setNum={setAdults}/>
+                <IncrementDecrementButtons setNum={setAdults} />
                 <span className="font-bold mb-5 mr-5 ml-5 text-2xl text-left">Children</span>
                 <IncrementDecrementButtons setNum={setChildren} />
                 <RelationshipButtons styles={props.styles} setStyles={props.setStyles} />
-                
+
             </div>
 
             <div className="mb-10">
@@ -92,15 +101,15 @@ export default function CustomInput(props) {
             <div className="mb-10">
                 <h2 className="font-bold text-2xl mb-5 text-left">Interests</h2>
                 {Object.keys(interests).map(key => (
-                    <ButtonInterest name={key} key={key} />
+                    <ButtonInterest name={key} key={key} handleInterest={handleInterest} />
                 ))}
             </div>
 
             <div className="mb-10">
                 <h2 className="font-bold text-2xl text-left">Cuisine</h2>
-                <CuiSineSlider min="Vegan" max="Meat-Lover" />
-                <CuiSineSlider min="Non-Spicy" max="Spicy" />
-                <CuiSineSlider min="Local" max="International" />
+                <CuiSineSlider min="Vegan" max="Meat-Lover" setValue={setfoodMeat} />
+                <CuiSineSlider min="Non-Spicy" max="Spicy" setValue={setfoodSpice} />
+                <CuiSineSlider min="Local" max="International" setValue={setfoodRegion}/>
             </div>
 
             <div className="mb-10">

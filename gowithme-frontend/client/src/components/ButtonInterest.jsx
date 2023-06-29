@@ -5,7 +5,10 @@ export default function ButtonInterest(props) {
     const [isToggled, setIsToggled] = useState(false);
 
     const handleClick = () => {
-        setIsToggled(!isToggled);
+        let update = !isToggled;
+        props.handleInterest(props.name,update);
+        setIsToggled(update);
+
     };
 
     return (

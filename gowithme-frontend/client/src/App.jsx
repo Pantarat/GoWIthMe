@@ -13,7 +13,11 @@ function App() {
         "relationship" : "",
         "duration" : 0,
         "date_range" : "",
-        "budget" : ""
+        "budget" : "",
+        "interests":"",
+        "food_meat" : 50,
+        "food_spice" : 50,
+        "food_region" : 50
     })
 
     return (

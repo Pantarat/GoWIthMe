@@ -28,7 +28,7 @@ export default function DayPlan(props) {
                 className={`overflow-hidden transition-max-height duration-500 ease-in-out`} style={{ maxHeight: isOpen ? '10000px' : '0' }}
             >
                 {props.detail.map((des, index) => {
-                    let travel = "Take " + des.means_of_travel + " for " + des.travel_time;
+                    let travel = (des.means_of_travel === "Walk" ? "" : "Take ") + des.means_of_travel + " for " + des.travel_time;
                     let travels = null;
                     if (des.means_of_travel === "N/A") {
                         if (des.travel_to === "N/A") {
